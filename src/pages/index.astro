@@ -148,7 +148,13 @@ import Base from '../layouts/Base.astro';
             href="https://github.com/foldermix/foldermix-desktop/releases/latest/download/foldermix-desktop.dmg"
             class="btn btn-primary"
           >
-            Download latest DMG →
+            Download <span class="dl-size">~35 MB</span> →
+          </a>
+          <a
+            href="https://github.com/foldermix/foldermix-desktop/releases/latest/download/foldermix-desktop-full.dmg"
+            class="btn btn-ghost"
+          >
+            with OCR <span class="dl-size">~130 MB</span> →
           </a>
           <a
             href="https://github.com/foldermix/foldermix-desktop"
@@ -160,7 +166,8 @@ import Base from '../layouts/Base.astro';
           </a>
         </div>
         <p class="install-note">
-          macOS 13 Ventura or later · Ad-hoc signed · right-click → Open on first launch
+          macOS 13 Ventura or later · Ad-hoc signed · right-click → Open on first launch<br/>
+          The OCR build adds support for scanned &amp; image-only PDFs (~95 MB of ML models).
         </p>
       </div>
     </div>
@@ -485,7 +492,8 @@ import Base from '../layouts/Base.astro';
     color: var(--text);
   }
   .install-cta   { display: flex; gap: 12px; flex-wrap: wrap; }
-  .install-note  { margin-top: 14px; font-size: 0.8rem; color: var(--muted); }
+  .install-note  { margin-top: 14px; font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+  .dl-size { opacity: 0.7; font-weight: 400; font-size: 0.8em; }
 
   /* FOOTER */
   footer { border-top: 1px solid var(--border); padding: 28px 24px; }
