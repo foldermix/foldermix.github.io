@@ -32,6 +32,23 @@ import Base from '../layouts/Base.astro';
           View on GitHub
         </a>
       </div>
+      <div class="trio">
+        <a href="#cli" class="trio-item">
+          <span class="trio-icon">⌨️</span>
+          <span class="trio-label">CLI</span>
+        </a>
+        <span class="trio-sep"></span>
+        <a href="#desktop" class="trio-item">
+          <span class="trio-icon">🖥️</span>
+          <span class="trio-label">Desktop</span>
+        </a>
+        <span class="trio-sep"></span>
+        <a href="#web" class="trio-item trio-soon">
+          <span class="trio-icon">🌐</span>
+          <span class="trio-label">Web</span>
+          <span class="trio-soon-pill">soon</span>
+        </a>
+      </div>
       <div class="terminal">
         <div class="terminal-bar">
           <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
@@ -196,6 +213,59 @@ import Base from '../layouts/Base.astro';
 </Base>
 
 <style>
+  /* TRIO */
+  .trio {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 40px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 6px 8px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .trio-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 18px;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--muted);
+    transition: color 0.15s, background 0.15s;
+    text-decoration: none;
+  }
+  .trio-item:hover {
+    color: var(--text);
+    background: rgba(255,255,255,0.06);
+    text-decoration: none;
+  }
+  .trio-icon { font-size: 1rem; line-height: 1; }
+  .trio-sep {
+    width: 1px;
+    height: 18px;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+  .trio-soon { opacity: 0.55; }
+  .trio-soon-pill {
+    font-size: 0.6rem;
+    font-family: var(--mono);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent2);
+    background: rgba(124,106,247,0.12);
+    border: 1px solid rgba(124,106,247,0.25);
+    border-radius: 999px;
+    padding: 1px 6px;
+  }
+
   /* NAV */
   header {
     position: sticky;
