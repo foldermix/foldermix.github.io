@@ -26,27 +26,28 @@ import Base from '../layouts/Base.astro';
         drop straight into ChatGPT, Claude, Gemini, or any other LLM.
         Pick your workflow — CLI, native desktop app, or the web.
       </p>
-      <div class="hero-actions">
-        <a href="#cli" class="btn btn-primary">Get started</a>
-        <a href="https://github.com/foldermix/foldermix" class="btn btn-ghost" target="_blank" rel="noopener">
-          View on GitHub
-        </a>
-      </div>
-      <div class="trio">
-        <a href="#cli" class="trio-item">
-          <span class="trio-icon">⌨️</span>
-          <span class="trio-label">CLI</span>
-        </a>
-        <span class="trio-sep"></span>
-        <a href="#desktop" class="trio-item">
-          <span class="trio-icon">🖥️</span>
-          <span class="trio-label">Desktop</span>
-        </a>
-        <span class="trio-sep"></span>
-        <a href="#web" class="trio-item trio-soon">
-          <span class="trio-icon">🌐</span>
-          <span class="trio-label">Web</span>
-          <span class="trio-soon-pill">soon</span>
+      <div class="trio-row">
+        <div class="trio">
+          <a href="#cli" class="trio-item">
+            <span class="trio-icon">⌨️</span>
+            <span class="trio-label">CLI</span>
+          </a>
+          <span class="trio-sep"></span>
+          <a href="#desktop" class="trio-item">
+            <span class="trio-icon">🖥️</span>
+            <span class="trio-label">Desktop</span>
+          </a>
+          <span class="trio-sep"></span>
+          <a href="#web" class="trio-item trio-soon">
+            <span class="trio-icon">🌐</span>
+            <span class="trio-label">Web</span>
+            <span class="trio-soon-pill">soon</span>
+          </a>
+        </div>
+        <a href="https://github.com/foldermix/foldermix" class="gh-pill" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg height="18" width="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
         </a>
       </div>
       <div class="terminal">
@@ -214,19 +215,39 @@ import Base from '../layouts/Base.astro';
 
 <style>
   /* TRIO */
-  .trio {
+  .trio-row {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0;
+    gap: 8px;
     margin-bottom: 40px;
+  }
+  .trio {
+    display: flex;
+    align-items: center;
+    gap: 0;
     background: rgba(255,255,255,0.04);
     border: 1px solid var(--border);
     border-radius: 999px;
     padding: 6px 8px;
-    width: fit-content;
-    margin-left: auto;
-    margin-right: auto;
+  }
+  .gh-pill {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--muted);
+    transition: color 0.15s, background 0.15s;
+    flex-shrink: 0;
+  }
+  .gh-pill:hover {
+    color: var(--text);
+    background: rgba(255,255,255,0.08);
+    text-decoration: none;
   }
   .trio-item {
     display: flex;
@@ -338,7 +359,7 @@ import Base from '../layouts/Base.astro';
     margin: 0 auto 36px;
     line-height: 1.7;
   }
-  .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 56px; }
+  .hero-actions { display: none; }
 
   /* BUTTONS */
   .btn {
