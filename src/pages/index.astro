@@ -10,7 +10,7 @@ import Base from '../layouts/Base.astro';
       <div class="nav-links">
         <a href="#cli">CLI</a>
         <a href="#desktop">Desktop</a>
-        <a href="#web">Web</a>
+        <a href="/web">Web</a>
         <a href="https://github.com/foldermix/foldermix" target="_blank" rel="noopener">GitHub</a>
       </div>
     </nav>
@@ -38,10 +38,9 @@ import Base from '../layouts/Base.astro';
             <span class="trio-label">Desktop</span>
           </a>
           <span class="trio-sep"></span>
-          <a href="#web" class="trio-item trio-soon">
+          <a href="/web" class="trio-item">
             <span class="trio-icon">🌐</span>
             <span class="trio-label">Web</span>
-            <span class="trio-soon-pill">soon</span>
           </a>
         </div>
         <a href="https://github.com/foldermix/foldermix" class="gh-pill" target="_blank" rel="noopener" aria-label="GitHub">
@@ -179,11 +178,11 @@ import Base from '../layouts/Base.astro';
       <div class="product-header">
         <div class="product-icon">🌐</div>
         <div>
-          <h2>foldermix Web <span class="coming-soon">coming soon</span></h2>
+          <h2>foldermix Web</h2>
           <p class="product-sub">Pack directly in your browser. No install, no setup.</p>
         </div>
       </div>
-      <div class="features muted">
+      <div class="features">
         <div class="feature">
           <div class="feature-title">Drag &amp; drop</div>
           <div class="feature-desc">Drop a folder straight onto the page.</div>
@@ -199,6 +198,13 @@ import Base from '../layouts/Base.astro';
         <div class="feature">
           <div class="feature-title">Copy to clipboard</div>
           <div class="feature-desc">One click to copy the packed context and paste into any LLM chat.</div>
+        </div>
+      </div>
+      <div class="install-block">
+        <div class="install-label">No install required — runs in your browser</div>
+        <div class="install-cta">
+          <a href="/web" class="btn btn-primary">Open foldermix Web →</a>
+          <a href="https://github.com/foldermix/foldermix-web" class="btn btn-ghost" target="_blank" rel="noopener">Source</a>
         </div>
       </div>
     </div>
