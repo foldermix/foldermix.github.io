@@ -221,7 +221,6 @@ const WEB_UPLOAD_LIMIT_MB = 50;
           >
             Download context.md
           </a>
-          <a href="https://github.com/foldermix/foldermix-web" class="btn btn-ghost web-source" target="_blank" rel="noopener">Source</a>
           <div id="web-progress" class="web-progress" hidden aria-hidden="true">
             <div id="web-progress-bar" class="web-progress-bar"></div>
           </div>
@@ -231,7 +230,7 @@ const WEB_UPLOAD_LIMIT_MB = 50;
           </p>
         </form>
         <div class="install-note web-note">
-          This browser flow is capped at {WEB_UPLOAD_LIMIT_MB} MB. For larger folders, OCR, or sensitive work, use the CLI or Desktop app instead.
+          This browser flow is capped at {WEB_UPLOAD_LIMIT_MB} MB. For larger folders, OCR, or sensitive work, use the CLI or Desktop app instead. <a href="https://github.com/foldermix/foldermix-web" target="_blank" rel="noopener">Source</a>.
         </div>
       </div>
     </div>
@@ -583,8 +582,7 @@ const WEB_UPLOAD_LIMIT_MB = 50;
     word-break: break-word;
   }
   .web-submit,
-  .web-download,
-  .web-source {
+  .web-download {
     justify-content: center;
   }
   .web-progress {
