@@ -1,5 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
+const WEB_APP_DEST = 'https://foldermix-web-production.up.railway.app';
+const WEB_UPLOAD_LIMIT_MB = 50;
 ---
 <Base>
   <!-- NAV -->
@@ -10,7 +12,7 @@ import Base from '../layouts/Base.astro';
       <div class="nav-links">
         <a href="#cli">CLI</a>
         <a href="#desktop">Desktop</a>
-        <a href="/web">Web</a>
+        <a href="#web">Web</a>
         <a href="https://github.com/foldermix/foldermix" target="_blank" rel="noopener">GitHub</a>
       </div>
     </nav>
@@ -38,7 +40,7 @@ import Base from '../layouts/Base.astro';
             <span class="trio-label">Desktop</span>
           </a>
           <span class="trio-sep"></span>
-          <a href="/web" class="trio-item">
+          <a href="#web" class="trio-item">
             <span class="trio-icon">🌐</span>
             <span class="trio-label">Web</span>
           </a>
@@ -184,27 +186,52 @@ import Base from '../layouts/Base.astro';
       </div>
       <div class="features">
         <div class="feature">
-          <div class="feature-title">Drag &amp; drop</div>
-          <div class="feature-desc">Drop a folder straight onto the page.</div>
+          <div class="feature-title">Upload a zip</div>
+          <div class="feature-desc">Choose a zipped project folder and send it straight to the converter.</div>
         </div>
         <div class="feature">
-          <div class="feature-title">Instant preview</div>
-          <div class="feature-desc">See the output before downloading.</div>
+          <div class="feature-title">Progress updates</div>
+          <div class="feature-desc">Track upload progress, then wait while the server packs the folder.</div>
         </div>
         <div class="feature">
-          <div class="feature-title">Zero upload</div>
-          <div class="feature-desc">Everything runs client-side. Your files never leave your machine.</div>
+          <div class="feature-title">One output file</div>
+          <div class="feature-desc">Get a single <code>context.md</code> file back, ready for ChatGPT, Claude, or Gemini.</div>
         </div>
         <div class="feature">
-          <div class="feature-title">Copy to clipboard</div>
-          <div class="feature-desc">One click to copy the packed context and paste into any LLM chat.</div>
+          <div class="feature-title">Temporary processing</div>
+          <div class="feature-desc">Files are processed on the server and deleted after conversion.</div>
         </div>
       </div>
-      <div class="install-block">
+      <div class="install-block web-block">
         <div class="install-label">No install required — runs in your browser</div>
-        <div class="install-cta">
-          <a href="/web" class="btn btn-primary">Open foldermix Web →</a>
-          <a href="https://github.com/foldermix/foldermix-web" class="btn btn-ghost" target="_blank" rel="noopener">Source</a>
+        <form id="web-upload-form" class="web-flow" data-api-base={WEB_APP_DEST} data-max-upload-mb={WEB_UPLOAD_LIMIT_MB}>
+          <input id="web-file-input" type="file" accept=".zip,application/zip" hidden />
+          <label for="web-file-input" id="web-picker" class="web-picker">
+            <span class="web-picker-title">Upload zip</span>
+            <span id="web-picker-text" class="web-picker-text">Choose a zipped project folder.</span>
+          </label>
+          <div id="web-selected-file" class="web-selected-file" hidden>No file selected yet.</div>
+          <button id="web-submit-button" type="submit" class="btn btn-primary web-submit" hidden>Convert zip</button>
+          <a
+            id="web-download-link"
+            href="#"
+            download="context.md"
+            class="btn btn-ghost web-download"
+            hidden
+          >
+            Download context.md
+          </a>
+          <a href="https://github.com/foldermix/foldermix-web" class="btn btn-ghost web-source" target="_blank" rel="noopener">Source</a>
+          <div id="web-progress" class="web-progress" hidden aria-hidden="true">
+            <div id="web-progress-bar" class="web-progress-bar"></div>
+          </div>
+          <div id="web-status" class="web-status" aria-live="polite" hidden></div>
+          <p class="web-privacy">
+            Files are processed temporarily and deleted after conversion. Do not upload secrets, passwords, private keys, medical records, financial records, or other confidential data.
+          </p>
+        </form>
+        <div class="install-note web-note">
+          This browser flow is capped at {WEB_UPLOAD_LIMIT_MB} MB. For larger folders, OCR, or sensitive work, use the CLI or Desktop app instead.
         </div>
       </div>
     </div>
@@ -501,6 +528,113 @@ import Base from '../layouts/Base.astro';
   .install-note  { margin-top: 14px; font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
   .dl-size { opacity: 0.7; font-weight: 400; font-size: 0.8em; }
 
+  .web-block {
+    display: grid;
+    gap: 16px;
+  }
+  .web-flow {
+    display: grid;
+    grid-template-columns: minmax(220px, 1.35fr) minmax(210px, 1fr) auto auto auto;
+    gap: 12px;
+    align-items: center;
+  }
+  .web-picker,
+  .web-selected-file,
+  .web-status,
+  .web-progress,
+  .web-privacy {
+    grid-column: 1 / -1;
+  }
+  .web-picker {
+    display: grid;
+    gap: 6px;
+    padding: 14px 16px;
+    border: 1px dashed rgba(69, 220, 230, 0.35);
+    border-radius: var(--radius);
+    background: rgba(255,255,255,0.03);
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, transform 0.15s;
+  }
+  .web-picker:hover,
+  .web-picker.is-dragging {
+    border-color: var(--accent);
+    background: rgba(69,220,230,0.08);
+    transform: translateY(-1px);
+  }
+  .web-picker-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .web-picker-text {
+    font-size: 0.92rem;
+    color: var(--muted);
+  }
+  .web-selected-file {
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 0.92rem;
+    color: var(--text);
+    word-break: break-word;
+  }
+  .web-submit,
+  .web-download,
+  .web-source {
+    justify-content: center;
+  }
+  .web-progress {
+    height: 8px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+  }
+  .web-progress-bar {
+    width: 0%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    transition: width 0.18s ease;
+  }
+  .web-progress.is-indeterminate .web-progress-bar {
+    width: 36%;
+    animation: web-indeterminate 1.1s ease-in-out infinite;
+  }
+  .web-status {
+    padding: 11px 14px;
+    border-radius: var(--radius);
+    background: rgba(255,255,255,0.06);
+    color: var(--muted);
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+  .web-status[data-tone="success"] {
+    color: #9bd9ac;
+    background: rgba(63,185,80,0.12);
+  }
+  .web-status[data-tone="error"] {
+    color: #ffb4b4;
+    background: rgba(255,95,87,0.12);
+  }
+  .web-privacy {
+    margin: 0;
+    font-size: 0.84rem;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+  .web-note {
+    margin-top: 0;
+  }
+
+  @keyframes web-indeterminate {
+    0% { transform: translateX(-120%); }
+    100% { transform: translateX(300%); }
+  }
+
   /* FOOTER */
   footer { border-top: 1px solid var(--border); padding: 28px 24px; }
   .footer-inner { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
@@ -515,5 +649,211 @@ import Base from '../layouts/Base.astro';
     .product-header { flex-direction: column; gap: 10px; }
     .footer-inner { flex-direction: column; align-items: flex-start; }
     .footer-copy { margin-right: 0; }
+    .web-flow {
+      grid-template-columns: 1fr;
+    }
   }
 </style>
+
+<script define:vars={{ WEB_APP_DEST, WEB_UPLOAD_LIMIT_MB }}>
+  const body = document.body;
+  const form = document.getElementById('web-upload-form');
+  const input = document.getElementById('web-file-input');
+  const picker = document.getElementById('web-picker');
+  const pickerText = document.getElementById('web-picker-text');
+  const selectedFileNode = document.getElementById('web-selected-file');
+  const downloadLinkNode = document.getElementById('web-download-link');
+  const progressNode = document.getElementById('web-progress');
+  const progressBarNode = document.getElementById('web-progress-bar');
+  const statusNode = document.getElementById('web-status');
+  const submitButton = document.getElementById('web-submit-button');
+  const apiBase = form?.dataset.apiBase || WEB_APP_DEST;
+  const maxUploadMb = Number(form?.dataset.maxUploadMb || WEB_UPLOAD_LIMIT_MB);
+  let downloadUrl = null;
+
+  function setStatus(message, tone = '') {
+    statusNode.hidden = false;
+    statusNode.textContent = message;
+    if (tone) {
+      statusNode.dataset.tone = tone;
+    } else {
+      delete statusNode.dataset.tone;
+    }
+  }
+
+  function hideStatus() {
+    statusNode.hidden = true;
+    statusNode.textContent = '';
+    delete statusNode.dataset.tone;
+  }
+
+  function setProgress(value) {
+    progressNode.hidden = false;
+    progressNode.classList.remove('is-indeterminate');
+    progressNode.setAttribute('aria-hidden', 'false');
+    progressBarNode.style.width = `${Math.max(0, Math.min(100, value))}%`;
+    progressBarNode.style.transform = '';
+  }
+
+  function setIndeterminateProgress() {
+    progressNode.hidden = false;
+    progressNode.classList.add('is-indeterminate');
+    progressNode.setAttribute('aria-hidden', 'false');
+    progressBarNode.style.width = '';
+  }
+
+  function hideProgress() {
+    progressNode.hidden = true;
+    progressNode.classList.remove('is-indeterminate');
+    progressNode.setAttribute('aria-hidden', 'true');
+    progressBarNode.style.width = '0%';
+    progressBarNode.style.transform = '';
+  }
+
+  function resetDownloadLink() {
+    if (downloadUrl) {
+      URL.revokeObjectURL(downloadUrl);
+      downloadUrl = null;
+    }
+    downloadLinkNode.hidden = true;
+    downloadLinkNode.href = '#';
+  }
+
+  function showDownloadLink(blob) {
+    resetDownloadLink();
+    downloadUrl = URL.createObjectURL(blob);
+    downloadLinkNode.href = downloadUrl;
+    downloadLinkNode.hidden = false;
+  }
+
+  function validateFile(file) {
+    if (!file) {
+      throw new Error('Choose a .zip file to continue.');
+    }
+    if (!file.name.toLowerCase().endsWith('.zip')) {
+      throw new Error('Please choose a valid .zip file.');
+    }
+    if (file.size > maxUploadMb * 1024 * 1024) {
+      throw new Error(`This zip is too large for the web converter. Limit: ${maxUploadMb} MB.`);
+    }
+  }
+
+  function updateFileLabel(file) {
+    pickerText.textContent = file ? `${file.name} selected.` : 'Choose a zipped project folder.';
+    selectedFileNode.hidden = !file;
+    submitButton.hidden = !file;
+    if (!file) {
+      hideStatus();
+      hideProgress();
+      resetDownloadLink();
+    }
+    selectedFileNode.textContent = file ? `Selected: ${file.name}` : 'No file selected yet.';
+  }
+
+  function uploadFile(payload) {
+    return new Promise((resolve, reject) => {
+      const request = new XMLHttpRequest();
+      request.open('POST', `${apiBase}/process`);
+      request.responseType = 'blob';
+
+      request.upload.addEventListener('progress', (event) => {
+        if (!event.lengthComputable) {
+          return;
+        }
+        const percent = Math.round((event.loaded / event.total) * 100);
+        setProgress(percent);
+        setStatus(`Uploading... ${percent}%`);
+      });
+
+      request.upload.addEventListener('load', () => {
+        setIndeterminateProgress();
+        setStatus('Upload complete. Processing on the server...');
+      });
+
+      request.addEventListener('load', async () => {
+        if (request.status >= 200 && request.status < 300) {
+          resolve(request.response);
+          return;
+        }
+
+        const responseBlob = request.response;
+        if (!responseBlob) {
+          reject(new Error('The converter could not process this zip.'));
+          return;
+        }
+
+        try {
+          const payload = JSON.parse(await responseBlob.text());
+          reject(new Error(payload.message || 'The converter could not process this zip.'));
+        } catch {
+          reject(new Error('The converter could not process this zip.'));
+        }
+      });
+
+      request.addEventListener('error', () => {
+        reject(new Error('The web converter backend is unavailable right now.'));
+      });
+
+      request.send(payload);
+    });
+  }
+
+  input.addEventListener('change', () => {
+    updateFileLabel(input.files[0]);
+  });
+
+  ['dragenter', 'dragover'].forEach((eventName) => {
+    picker.addEventListener(eventName, (event) => {
+      event.preventDefault();
+      picker.classList.add('is-dragging');
+    });
+  });
+
+  ['dragleave', 'drop'].forEach((eventName) => {
+    picker.addEventListener(eventName, (event) => {
+      event.preventDefault();
+      picker.classList.remove('is-dragging');
+    });
+  });
+
+  picker.addEventListener('drop', (event) => {
+    const [file] = event.dataTransfer.files;
+    if (!file) {
+      return;
+    }
+    const transfer = new DataTransfer();
+    transfer.items.add(file);
+    input.files = transfer.files;
+    updateFileLabel(file);
+  });
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    try {
+      const file = input.files[0];
+      validateFile(file);
+      resetDownloadLink();
+      hideStatus();
+      submitButton.disabled = true;
+      setProgress(0);
+      setStatus('Preparing upload...');
+
+      const payload = new FormData();
+      payload.append('file', file);
+
+      const blob = await uploadFile(payload);
+      setProgress(100);
+      showDownloadLink(blob);
+      setStatus('Your file is ready.', 'success');
+      submitButton.hidden = true;
+    } catch (error) {
+      resetDownloadLink();
+      hideProgress();
+      const message = error instanceof Error ? error.message : 'The converter could not process this zip.';
+      setStatus(message, 'error');
+    } finally {
+      submitButton.disabled = false;
+    }
+  });
+</script>

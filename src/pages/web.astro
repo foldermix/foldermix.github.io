@@ -1,8 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
-const DEST = 'https://foldermix-web-production.up.railway.app/';
+const DEST = '/#web';
 ---
-<Base title="foldermix Web" description="Pack any folder in your browser — no install required.">
+<Base title="foldermix Web" description="Jump straight to the browser upload flow.">
   <meta http-equiv="refresh" content={`0; url=${DEST}`} slot="head-extra" />
   <div class="splash">
     <div class="inner">
@@ -11,8 +11,8 @@ const DEST = 'https://foldermix-web-production.up.railway.app/';
         <span class="wordmark">foldermix</span>
         <span class="badge">web</span>
       </div>
-      <p class="msg">Launching foldermix Web…</p>
-      <a href={DEST} class="btn">Open now →</a>
+      <p class="msg">Opening the browser upload flow…</p>
+      <a href={DEST} class="btn">Go to Web →</a>
     </div>
   </div>
 </Base>
